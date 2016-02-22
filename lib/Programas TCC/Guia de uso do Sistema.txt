@@ -1,0 +1,115 @@
+			xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+				Guia de uso do Sistema	
+			xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+
+
+
+
+
+* Informações relevanates *
+----------------------------------------------------------------------------------------
+ Optou-se pelo desenvolvimento web permitindo maior acesso aos dados por parte 
+ dos usuários e interessados no assunto. O sistema está disponivel no endereço 
+ eletrônico www.palavrasindigenas.com.br, onde todas as funcionalidades apresen-
+ taram bom funcionamento, tendo em vista que algumas funções só ficam disponiveis
+ mediante o uso de um servidor web (envio de senha por email, etc).
+ O uso e testes através do endereço eletrônico disponvel é recomendado.
+ O navegaro de internet Google Chrome apresentou melhor desempenho na utilização
+ do sistema, por isso seu uso é recomendado. A geração do PDF funcinou adequadamente
+ neste navegador ao utilizar a opção "Abrir com o vizualizador do sistema."
+ Obs: algumas imagens e sons (pronuncias de palvras indigenas) foram disponibilizadas
+ no desktop para uso no povoamento do sistema, caso queiram fazer uso.
+
+-----------------------------------------------------------------------------------------
+
+
+* Informações importantes *
+-----------------------------------------------------------------------------------------
+  As funcionalidades que utilizam o serviço de enviar e-mail 
+  não estão disponibilizadas para servidores locais (virtual box).
+  Por conta disso, não utilize a funcionalidade "Esqueci minha senha" 
+  e "Habilitar / Reprovar".
+  
+  Além disso a resolução da maquina virtual (virtual box)
+  é de apenas 1024x768(4:3). Por conta disso, a tela original do sistema 
+  não é mostrada adequadamente nesta resolução.
+
+  Para visualizar o sistema funcionando corretamente acesse o link
+  oficial do sistema.
+
+-----------------------------------------------------------------------------------------
+
+
+Acessando o sistema pelo link oficial do sistema 
+------------------------------------------------------------------------------------------
+ Módulo Visitante:
+  Endereço : http://www.palavrasindigenas.com.br/
+  Apelido  : não é necessário no modulo visitante
+  Senha    : não é necessário no modulo visistante      
+
+ Módulo Colaborador:
+  Endereço : http://www.palavrasindigenas.com.br/	
+  Apelido  : laila
+  Senha    : 123456
+
+ Módulo Moderador:
+  Endereço : http://www.palavrasindigenas.com.br/		
+  Apelido  : fa
+  Senha    : 123456
+
+* Importante *
+  Caso alguém que estejam corrigindo este sistema na web
+  remover os privilégios de Moderadores ou Reprovar Colaboradores este deve
+  informar aos outros para evitar o acesso ao sistema se perca.  
+
+  Também é possivel se cadastrar no sistema (aba Novo Colaborador) e ver como o sistema 
+  funciona. Neste caso a senha deve ser verificada diretamente no Banco de Dados 
+  http://localhost/phpmyadmin/
+
+--------------------------------------------------------------------------------------------------
+
+
+Para acessar o sistema na maquina virtual(virtual box).
+---------------------------------------------------------------------------------------------------
+
+
+* Importante *
+  É importante que a internet esteja funcionando também, por isso,
+  antes de acessar o sistema certifique-se que tenha internet na maquina
+  virtual (virtual box).
+
+ A plataforma utilizada para instalar o sistema: 
+  Windowns 7 Ultimate
+  Senha do usuário root    : " " - sem senha (em branco)
+  Senha dos outro usuários : " " -  sem senha (em branco) 
+
+
+ Banco de dados MySQL
+
+  Endereço  	: //localhost/palavras_indigenas/
+  Banco de dados: palavras_indigenas
+  Usuário	: root
+  Senha 	: " " - sem senha (em branco)
+
+
+ Módulo Visitante:
+  Endereço : http://localhost/palavras_indigenas/
+  Apelido  : não é necessário no modulo visitante
+  Senha    : não é necessário no modulo visistante      
+
+ Módulo Colaborador:
+  Endereço : http://localhost/palavras_indigenas/	
+  Apelido  : laila
+  Senha    : 123456
+
+ Módulo Moderador:
+  Endereço : http://localhost/palavras_indigenas/		
+  Apelido  : fa
+  Senha    : 123456
+
+
+ * Atenção: O Artigo e o Manual do Usuário também oferecem informações relevantes para utilização do sistema.
+
+
+

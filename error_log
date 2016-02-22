@@ -1,0 +1,34 @@
+[13-Nov-2014 14:36:00 UTC] PHP Warning:  file(./imagem/dog56.png): failed to open stream: No such file or directory in /home/palavras/public_html/apresentacao/colaborador/homeColaborador.php on line 86
+[13-Nov-2014 14:36:48 UTC] PHP Warning:  file(./imagem/number41.png): failed to open stream: No such file or directory in /home/palavras/public_html/apresentacao/colaborador/homeColaborador.php on line 86
+[13-Nov-2014 14:36:48 UTC] PHP Warning:  file(./imagem/heart256.png): failed to open stream: No such file or directory in /home/palavras/public_html/apresentacao/colaborador/homeColaborador.php on line 86
+[13-Nov-2014 14:37:14 UTC] PHP Warning:  file(./imagem/dog56.png): failed to open stream: No such file or directory in /home/palavras/public_html/apresentacao/colaborador/homeColaborador.php on line 86
+[13-Nov-2014 15:22:04 UTC] PHP Warning:  file(./imagem/dog56.png): failed to open stream: No such file or directory in /home/palavras/public_html/apresentacao/colaborador/homeColaborador.php on line 86
+[13-Nov-2014 15:22:06 UTC] PHP Warning:  file(./imagem/dog56.png): failed to open stream: No such file or directory in /home/palavras/public_html/apresentacao/colaborador/homeColaborador.php on line 86
+[13-Nov-2014 15:23:30 UTC] PHP Strict Standards:  Only variables should be passed by reference in /home/palavras/public_html/header.php on line 770
+[13-Nov-2014 15:24:29 UTC] PHP Strict Standards:  Only variables should be passed by reference in /home/palavras/public_html/header.php on line 770
+[13-Nov-2014 15:33:07 UTC] PHP Warning:  file(./imagem/dog56.png): failed to open stream: No such file or directory in /home/palavras/public_html/apresentacao/colaborador/homeColaborador.php on line 86
+[13-Nov-2014 18:39:03 UTC] PHP Warning:  file(./imagem/dog56.png): failed to open stream: No such file or directory in /home/palavras/public_html/apresentacao/colaborador/homeColaborador.php on line 86
+[13-Nov-2014 18:41:16 UTC] PHP Strict Standards:  Only variables should be passed by reference in /home/palavras/public_html/header.php on line 770
+[13-Nov-2014 20:01:43 UTC] PHP Warning:  file(./imagem/dog56.png): failed to open stream: No such file or directory in /home/palavras/public_html/apresentacao/admin/homeColaborador.php on line 98
+[13-Nov-2014 20:01:53 UTC] PHP Warning:  file(./imagem/dog56.png): failed to open stream: No such file or directory in /home/palavras/public_html/apresentacao/admin/homeColaborador.php on line 98
+[13-Nov-2014 21:48:51 UTC] PHP Warning:  file(./imagem/dog56.png): failed to open stream: No such file or directory in /home/palavras/public_html/apresentacao/colaborador/homeColaborador.php on line 86
+[13-Nov-2014 21:52:06 UTC] PHP Warning:  file(./imagem/dog56.png): failed to open stream: No such file or directory in /home/palavras/public_html/apresentacao/colaborador/homeColaborador.php on line 86
+[13-Nov-2014 21:53:35 UTC] PHP Strict Standards:  Only variables should be passed by reference in /home/palavras/public_html/header.php on line 770
+[13-Nov-2014 21:57:58 UTC] PHP Warning:  file(./imagem/dog56.png): failed to open stream: No such file or directory in /home/palavras/public_html/apresentacao/colaborador/homeColaborador.php on line 86
+[13-Nov-2014 21:59:18 UTC] PHP Warning:  file(./imagem/dog56.png): failed to open stream: No such file or directory in /home/palavras/public_html/apresentacao/colaborador/homeColaborador.php on line 86
+[13-Nov-2014 22:34:09 UTC] PHP Warning:  file(./imagem/dog56.png): failed to open stream: No such file or directory in /home/palavras/public_html/apresentacao/admin/palavra/minhas_palavras.php on line 94
+[13-Nov-2014 22:34:09 UTC] PHP Warning:  file(./imagem/number41.png): failed to open stream: No such file or directory in /home/palavras/public_html/apresentacao/admin/palavra/minhas_palavras.php on line 94
+[13-Nov-2014 23:04:25 UTC] PHP Strict Standards:  Only variables should be passed by reference in /home/palavras/public_html/header.php on line 770
+[13-Nov-2014 23:13:18 UTC] PHP Strict Standards:  Only variables should be passed by reference in /home/palavras/public_html/header.php on line 876
+[13-Nov-2014 23:17:47 UTC] PHP Strict Standards:  Only variables should be passed by reference in /home/palavras/public_html/header.php on line 772
+[13-Nov-2014 23:18:32 UTC] PHP Strict Standards:  Only variables should be passed by reference in /home/palavras/public_html/header.php on line 876
+[13-Nov-2014 23:18:59 UTC] PHP Strict Standards:  Only variables should be passed by reference in /home/palavras/public_html/header.php on line 876
+[13-Nov-2014 23:19:53 UTC] PHP Strict Standards:  Only variables should be passed by reference in /home/palavras/public_html/header.php on line 876
+[13-Nov-2014 23:22:20 UTC] PHP Strict Standards:  Only variables should be passed by reference in /home/palavras/public_html/header.php on line 876
+[13-Nov-2014 23:28:13 UTC] PHP Warning:  explode(): Empty delimiter in /home/palavras/public_html/header.php on line 875
+[13-Nov-2014 23:28:13 UTC] PHP Warning:  end() expects parameter 1 to be array, boolean given in /home/palavras/public_html/header.php on line 876
+[13-Nov-2014 23:32:12 UTC] PHP Parse error:  syntax error, unexpected end of file in /home/palavras/public_html/header.php on line 351
+[14-Nov-2014 00:09:49 UTC] PHP Warning:  mysql_num_rows() expects parameter 1 to be resource, boolean given in /home/palavras/public_html/apresentacao/visitante/homeVisitante.php on line 60
+[03-Feb-2015 21:25:31 UTC] PHP Warning:  POST Content-Length of 8414737 bytes exceeds the limit of 8388608 bytes in Unknown on line 0
+[03-Aug-2015 19:10:27 UTC] PHP Warning:  POST Content-Length of 8414737 bytes exceeds the limit of 8388608 bytes in Unknown on line 0
+[26-Aug-2015 17:32:47 UTC] PHP Warning:  mysql_connect(): Can't connect to local MySQL server through socket '/var/lib/mysql/mysql.sock' (111) in /home/palavras/public_html/persistencia/conexao/DB.class.php on line 19
