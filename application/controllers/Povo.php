@@ -38,8 +38,13 @@ class Povo extends CI_Controller {
             $menu_sistema = 'visitante/menuTop';
             $conteudo_sistema = 'visitante/homeVisitante';
 
-            $povos = $this->Povo_model->obter_todos_povo()->result();
-
+            $povos;
+            if ($this->input->get("p", TRUE)) {
+                $pesquisa = $this->input->get("p", TRUE);
+                $povos = $this->Povo_model->obter_povo_pesquisa($pesquisa)->result();
+            } else {
+                $povos = $this->Povo_model->obter_todos_povo()->result();
+            }
 
 
             $dados = array(
@@ -101,7 +106,8 @@ class Povo extends CI_Controller {
 
                 $dados = array(
                     'nomePovo' => $nomePovo,
-                    'obsPovo' => $obsPovo
+                    'obsPovo' => $obsPovo,
+                    'statusPovo' => 1
                 );
 
                 $this->Povo_model->inserirPovo($dados);
@@ -189,6 +195,13 @@ class Povo extends CI_Controller {
 
             if (count($povo_existe) == 0) {
                 redirect(base_url('povo'));
+            }
+
+            $palavras = $this->Povo_model->obter_palavras_por_povo($id_povo)->result();
+
+            if (count($palavras) > 0) {
+                $this->session->set_flashdata("erro_excluir", "O povo não pode ser excluido porque está sendo utilizado pelas palavras.");
+                redirect(base_url("Povo/"));
             }
 
             $this->Povo_model->excluirPovo($id_povo);

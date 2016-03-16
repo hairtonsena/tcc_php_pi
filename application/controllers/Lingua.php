@@ -11,7 +11,7 @@ class Lingua extends CI_Controller {
         $this->load->helper('url');
         $this->load->library('form_validation');
 
-
+//        $this->load->model('Palavra_model');
         $this->load->model('Lingua_model');
     }
 
@@ -39,17 +39,18 @@ class Lingua extends CI_Controller {
             $menu_sistema = 'visitante/menuTop';
             $conteudo_sistema = 'visitante/homeVisitante';
 
+            $linguas;
+            
+            if($this->input->get("p",TRUE)){
+                $pesquisa = $this->input->get("p");
+                $linguas = $this->Lingua_model->obter_lingua_pesquisa($pesquisa)->result();
+            }else{
             $linguas = $this->Lingua_model->obter_todas_lingua()->result();
-
-
-
-
+            }
 
             $dados = array(
                 'linguas' => $linguas
             );
-
-
 
             if ($this->verificar_usuario_logado() == TRUE) {
                 if ($this->tipo_usuario_logado() == 0 || $this->tipo_usuario_logado('tipo_usuario') == 1) {
@@ -105,7 +106,8 @@ class Lingua extends CI_Controller {
 
                 $dados = array(
                     'nomeLingua' => $nomeLingua,
-                    'obsLingua' => $obsLingua
+                    'obsLingua' => $obsLingua,
+                    'statusLingua'=>1
                 );
 
                 $this->Lingua_model->inserirLingua($dados);
@@ -143,8 +145,6 @@ class Lingua extends CI_Controller {
                     $conteudo_sistema = 'colaborador/homeColaborador';
                 }
             }
-
-
 
             $dados = array(
                 'lingua' => $lingua
@@ -195,6 +195,13 @@ class Lingua extends CI_Controller {
                 redirect(base_url('lingua'));
             }
 
+            $palavras = $this->Lingua_model->obter_palavras_por_lingua($id_lingua)->result();
+            
+            if(count($palavras)>0){
+                $this->session->set_flashdata("erro_excluir","A lingua não pode ser excluida porque está sendo usadas nas palavras");
+                redirect(base_url("Lingua"));
+            }
+            
             $this->Lingua_model->excluirLingua($id_lingua);
 
             redirect(base_url('lingua'));

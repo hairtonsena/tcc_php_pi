@@ -1,9 +1,18 @@
+<?php if (!empty($this->session->flashdata("erro_excluir"))) { ?>
+    <div class="alert alert-danger" role="alert"> <?php echo $this->session->flashdata("erro_excluir") ?> </div>
+<?php } ?>
 <div class="row" style="margin: 0px; padding: 0px;">
     <div class="col-lg-6">
-        <form action = "./?acao=povo" method = "GET" >
-            <input type = "hidden" name = "acao" value = "povo" />
+        <form action = "<?php echo base_url("povo") ?>" method="GET" >
             <div class="input-group">
-                <input type = "text" name = "pesquisarPalavra" required="true" class="form-control"  value = "" />
+                <?php 
+                $texto_pesquisa = "";
+                if($this->input->get("p",TRUE)){
+                    $texto_pesquisa = $this->input->get("p");
+                }
+                ?>
+                
+                <input type="text" name="p" required="true" class="form-control"  value="<?php echo $texto_pesquisa ?>" />
                 <span class="input-group-btn">
                     <input class="btn btn-default" type = "submit" value = "Pesquisar"/>
                 </span>
@@ -11,7 +20,7 @@
         </form>
     </div>
     <div class="col-lg-6">
-        <a class="btn btn-default pull-left" href="<?php echo base_url('povo/novo') ?>">Cadastrar Povo</a>
+        <a class="btn btn-primary pull-left" href="<?php echo base_url('povo/novo') ?>">Cadastrar Povo</a>
         <a class="btn btn-default pull-right" href = "<?php echo base_url('povo/') ?>" >Ver Todos </a>
     </div>
 </div>

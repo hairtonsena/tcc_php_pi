@@ -1,27 +1,68 @@
 <div class="container">
     <div class="col-lg-12" style="margin: 0px; padding: 0px;">
-        <div class="col-lg-6">
-            <form action="./" method="GET" >
-                Pesquisar por:
-                <label><input type="radio" name="opcaoPesquisa" required="true" value="portugues" id="abc" />Portugues</label>
-                <label><input type="radio" name="opcaoPesquisa" required="true" value="indigena" id="abc" />Indigena</label>
-                <label><input type="radio" name="opcaoPesquisa" required="true" value="tipo" id="abc" />Lingua</label>
-                <label><input type="radio" name="opcaoPesquisa" required="true" value="povo" id="abc"/>Povo</label>
-                <input type="hidden" name="acao" size="50" value="minhas_palavras"/>
+        <div class="col-lg-4">
+            <form action="<?php echo base_url("palavras/minhas/") ?>" method="GET" >
                 <div class="input-group">
-                    <input type="text" name="pesquisarPalavra" required="true" class="form-control" value="" />
+                    <input type="text" name="p" required="true" class="form-control" value="" />
                     <span class="input-group-btn">
-                        <input class="btn btn-default" type="submit" value="Pesquisar"/>
+                        <button class="btn btn-success" type="submit" title="Pesquisar" ><i style="font-size: 20px" class="glyphicon glyphicon-search" ></i></button>
                     </span>
                 </div>
             </form>
         </div>
 
-        <div class="col-lg-6 text-right">
-            <br/>
-            <a class="btn btn-primary pull-left" href="<?php echo base_url('palavras/nova_palavra'); ?>">Cadastrar Palavra</a>
-            <a class="btn btn-default" href="<?php echo base_url('palavras/minhas') ?>" >Ver Todos </a> 
-            <a class="btn btn-default" href="apresentacao/admin/relatorio.php" > Gerar Relatorio </a> 
+        <div class="col-lg-8 text-right">
+            <?php
+            $linkRelatorio = '';
+            if ((empty($opcaoLingua)) && (empty($opcaoPovo))) {
+                $linkRelatorio = base_url('palavras/gerar_relatorio_minhas');
+            } else {
+                $linkRelatorio = base_url('palavras/gerar_relatorio_minhas?lingua=' . $opcaoLingua . '&povo=' . $opcaoPovo);
+            }
+            ?>
+
+            <a class="btn btn-default" target="_blank" href="<?php echo $linkRelatorio ?>" ><span class="text-success"> Gerar Relatorio </span></a> 
+            <a class="btn btn-default" href="<?php echo base_url("palavras/minhas") ?>" ><span class="text-success"> Ver Todos </span></a>
+            <a class="btn btn-primary" href="<?php echo base_url('palavras/nova_palavra'); ?>"> Cadastrar</a>
+
+            <div class="col-lg-3" style="padding: 0px; margin: 0px">
+
+
+                <select name="" class="form-control" id="lingua" onchange="fuc_filtros_minhas()" style="color: #006400" >
+                    <option value="0">Lingua</option>
+                    <?php
+                    foreach ($linguas as $lin) {
+                        if ($opcaoLingua == $lin->idLingua) {
+                            ?>
+                            <option selected="true" value="<?php echo $lin->idLingua ?>"><?php echo $lin->nomeLingua ?></option>
+
+                        <?php } else {
+                            ?>
+                            <option value="<?php echo $lin->idLingua ?>"><?php echo $lin->nomeLingua ?></option>
+                            <?php
+                        }
+                    }
+                    ?>
+                </select>
+            </div>
+            <div class="col-lg-3 " style="padding: 0px; margin: 0px">
+                <select name="" id="povo" onchange="fuc_filtros_minhas()" class="form-control" style="color: #006400" >
+                    <option value="0">Povo</option>
+                    <?php
+                    foreach ($povos as $pov) {
+                        if ($opcaoPovo == $pov->idPovo) {
+                            ?>
+                            <option selected="true" value="<?php echo $pov->idPovo ?>"><?php echo $pov->nomePovo ?></option>
+                        <?php } else { ?>
+                            <option value="<?php echo $pov->idPovo ?>"><?php echo $pov->nomePovo ?></option>
+                            <?php
+                        }
+                    }
+                    ?>
+                </select>
+            </div> 
+
+
         </div>
         <?php if (count($registro_pralavras) == 0) { ?>
             <div style="width: 100%; clear: both">Registro não encontrado!</div>
@@ -47,21 +88,19 @@
                         ?>
                         <tr>
                             <td>
-                                <a href="<?php echo base_url('palavras/inserir_imagem/' . $res_pal->idPalavra) ?>">Alterar Imagem</a> <br/>
+
                                 <img src="<?php echo base_url("imagem/" . $res_pal->imagemPalavra) ?>" width="100" height="100" />
                             </td>
 
                             <td><?php echo $res_pal->palavraPortugues ?></td>
                             <td><?php echo $res_pal->palavraIndigina ?></td>
                             <td>
-                                <a href="<?php echo base_url('palavras/inserir_som/' . $res_pal->idPalavra) ?>">Alterar Som</a> <br/>
-                                <audio controls class="audio_palavra" id="audio_<?php echo $res_pal->idPalavra ?>">
+                                <audio controls style="display: none" class="audio_palavra" id="audio_<?php echo $res_pal->idPalavra ?>">
                                     <source  src="<?php echo base_url("sons/" . $res_pal->somPalavra) ?>" type="audio/mp3" >
                                 </audio>
                                 <div class="btn-group">
                                     <button class="btn btn-default" onclick="document.getElementById('audio_<?php echo $res_pal->idPalavra ?>').play()"><i class="glyphicon glyphicon-play"></i></button>
-                                    <button class="btn btn-default" onclick="document.getElementById('audio_<?php echo $res_pal->idPalavra ?>').volume += 0.1"><i class="glyphicon glyphicon-plus"></i></button>
-                                    <button class="btn btn-default" onclick="document.getElementById('audio_<?php echo $res_pal->idPalavra ?>').volume -= 0.1"><i class="glyphicon glyphicon-minus"></i></button>
+
                                 </div>
                             </td>
                             <td>
@@ -76,22 +115,28 @@
 
 
 
-                            <td><a href="<?php echo base_url('palavras/alterar/' . $res_pal->idPalavra) ?>">Alterar</a></td>
-                            <td><a href="<?php echo base_url('palavras/excluir/' . $res_pal->idPalavra) ?>">Excluir</a></td>
+                            <td><a href="<?php echo base_url('palavras/inserir_imagem/' . $res_pal->idPalavra) ?>"><i class="glyphicon glyphicon-edit"></i></a></td>
+                            <td><a href="<?php echo base_url('palavras/excluir/' . $res_pal->idPalavra) ?>"><i class="glyphicon glyphicon-remove"></i></a></td>
                         </tr>
                         <?php
                     }
                     ?>
                 </tbody>
             </table>
-            <div class="col-lg-12 text-center">
+            <div class="col-lg-12 text-center paginacao">
                 <ul class="pagination">
                     <?php
-                    for ($i = 0; $i < $qtde_paginas; $i++) {
+                    $linkPaginacao = '';
+                    if ((empty($opcaoLingua)) && (empty($opcaoPovo))) {
+                        $linkPaginacao = base_url('palavras/minhas/?pg=');
+                    } else {
+                        $linkPaginacao = base_url('palavras/minhas/?lingua=' . $opcaoLingua . '&povo=' . $opcaoPovo . '&pg=');
+                    }
+
+                    for ($i = 1; $i <= $qtde_paginas; $i++) {
                         ?>
-                        <li><a href="<?php echo base_url('palavras/minhas?pg=' . $i) ?>"><?php echo $i ?></a></li>
-                    <?php }
-                    ?>
+                        <li><a href="<?php echo $linkPaginacao . $i ?>"><?php echo $i ?></a></li>
+                    <?php } ?>
                 </ul>
             </div>
 

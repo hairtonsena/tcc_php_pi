@@ -1,5 +1,6 @@
-<div class="col-lg-12">
-    <a href="<?php echo base_url('palavras/minhas') ?>" class="btn btn-danger pull-right" style="font-size: 18px;"> Voltar minhas palavras</a>
+<div class="col-lg-12" style="margin-bottom: 20px">
+    <a href="<?php echo base_url('palavras/minhas') ?>" class="btn btn-danger " style="font-size: 16px;"> Voltar </a>
+    <a href="<?php echo base_url('palavras/minhas') ?>" class="btn btn-success " style="font-size: 16px;"> Salvar </a>
 </div>
 <div class="col-lg-12">
 
@@ -75,26 +76,68 @@
             </fieldset>
         </form>
     </div>
-    <div class="col-lg-4">
-        <form action="?acao=salvar_imagem_palavra" method="POST" enctype="multipart/form-data" >
-            <fieldset>
-                <legend> Inserir imagem </legend>
+    <div class="col-lg-8">
+        <div class="col-lg-12">
+            <h3>Categorias <small> *Opcional</small></h3>
+        </div>
+        <div class="col-lg-12" style="margin: 0px; padding: 0px">
+            <div class="col-lg-4">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <h4><strong>Tipo:</strong></h4>
+                        <div class="radio">
+                            <label>
+                                <input  type="radio" name="tipo_palavra" checked="true" value="Cat" />Nenhuma
+                            </label>
 
-                <input type="file" required="true" disabled="true" accept="image/*" class="form-control" name="imagemPalavra"/>
-                <br/>
-                <input type="submit" class="btn btn-default" disabled="true" value="Inserir"/>
-            </fieldset>
-        </form>
-    </div>
-    <div class="col-lg-4">
-        <form action="./?acao=salvar_som_palavra" method="POST" enctype="multipart/form-data" >
-            <fieldset>
-                <legend>Inserir som</legend>
+                        </div>
 
-                <input type="file" class="form-control" disabled="true" accept="audio/*" required="true" name="somPalavra"/>
-                <br/>
-                <input type="submit" disabled="true" class="btn btn-default" value="Inserir"/>
-            </fieldset>
-        </form>
+                        <?php for ($i = 0; $i < count($tipo_palavra); $i++) { ?>
+                            <div class="radio">
+                                <label>
+                                    <input  type="radio" name="tipo_palavra" value="Cat" /><?php echo $tipo_palavra[$i]->nomeTipoPalavra ?>
+                                </label>
+                            </div>
+                        <?php } ?>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <h4><strong>Classificação:</strong></h4>
+                        <div class="radio">
+                            <label>
+                                <input  type="radio" name="tipo_palavra" value="Cat" />Cats
+                            </label>
+
+                        </div>
+                        <div class="radio">
+                            <label>
+                                <input  type="radio" name="tipo_palavra" value="Cat" />Cats
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <h4><strong>Classe gramatical:</strong></h4>
+                        <div class="radio">
+                            <label>
+                                <input  type="radio" name="tipo_palavra" value="Cat" />Cats
+                            </label>
+
+                        </div>
+                        <div class="radio">
+                            <label>
+                                <input  type="radio" name="tipo_palavra" value="Cat" />Cats
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

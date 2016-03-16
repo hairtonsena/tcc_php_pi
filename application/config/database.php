@@ -78,14 +78,16 @@ $db['default'] = array(
 	'hostname' => 'localhost',
     
     
-    	'username' => 'palavras_root',
-	'password' => 'palavra',
-	'database' => 'palavras_indigenas',
+//    	'username' => 'palavras_root',
+//	'password' => 'palavra',
+//	'database' => 'palavras_indigenas',
     
     
-//	'username' => 'root',
-//	'password' => '12345',
-//	'database' => 'palavra_indigenas',
+	'username' => 'root',
+	'password' => '12345',
+	'database' => 'palavra_indigenas',
+    
+    
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
 	'pconnect' => FALSE,

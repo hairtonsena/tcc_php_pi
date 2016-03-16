@@ -17,11 +17,25 @@ class Lingua_model extends CI_Model {
         return $this->db->get('lingua');
     }
 
-    public function obter_lingua_id($id_lingua){
+    public function obter_lingua_pesquisa($pesquisa){
+        $this->db->like("nomeLingua",$pesquisa);
+        $this->db->or_like("obsLingua",$pesquisa);
+        return $this->db->get("lingua");
+    }
+
+        public function obter_todas_lingua_ativas(){
+        return $this->db->get_where('lingua',array('statusLingua'=>1));
+    }
+
+        public function obter_lingua_id($id_lingua){
         return $this->db->get_where('lingua',array('idLingua'=>$id_lingua));
     }
 
-    public function inserirLingua($dados){
+    public function obter_palavras_por_lingua($id_lingua){
+        return $this->db->get_where('palavra',array("idLingua"=>$id_lingua));
+    }
+
+        public function inserirLingua($dados){
         $this->db->insert('lingua',$dados);
     }
     

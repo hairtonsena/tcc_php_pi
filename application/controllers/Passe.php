@@ -41,6 +41,8 @@ class Passe extends CI_Controller {
             $this->index();
         } else {
             redirect(base_url());
+            
+//            $this->novo_colaborador();
         }
     }
 

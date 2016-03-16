@@ -14,6 +14,7 @@ class Palavras extends CI_Controller {
         $this->load->model('Palavras_model');
         $this->load->model('Povo_model');
         $this->load->model('Lingua_model');
+        $this->load->model('Categoria_model');
     }
 
     private $menu_sistema = 'visitante/menuTop';
@@ -21,7 +22,7 @@ class Palavras extends CI_Controller {
     private $dados = NULL;
     private $numeroPagina = 0;
     private $quantidadeRegistroPalavras = 0;
-    protected $numeroRegistroPorPagina = 6;
+    protected $numeroRegistroPorPagina = 20;
     protected $todas_palavras = array();
 
     protected function verificar_usuario_logado() {
@@ -46,31 +47,45 @@ class Palavras extends CI_Controller {
 
     public function index() {
 
+        $opcaoLingua = 0;
+        $opcaoPovo = 0;
+
+
         if (isset($_GET['pg'])) {
-            $this->numeroPagina = $_GET['pg'];
+            $this->numeroPagina = $_GET['pg'] - 1;
         }
 
-        $quantidadeRegistroPalavras = $this->Palavras_model->consultarNumeroRegistro();
+
         $registro_palavras = "";
+        $qtde_paginas = 0;
 
+//        Condição para o campo de pesquisa
+        if ((isset($_GET['p']))) {
 
+            $pesquisa = trim(strip_tags($_GET['p']));
 
-        if ((isset($_GET['pesquisarPalavra']) && (isset($_GET['opcaoPesquisa'])))) {
-
-            $opcaoPesquisa = mysql_escape_string(trim(strip_tags($_GET['opcaoPesquisa'])));
-            $pesquisarPalavra = mysql_escape_string(trim(strip_tags($_GET['pesquisarPalavra'])));
-
-            if ($opcaoPesquisa == 'portugues') {
-                $registro_palavras = "SELECT * FROM palavra P inner join lingua L on(P.idLingua=L.idLingua) inner join povo PV on(P.idPovo=PV.idPovo) WHERE P.palavraPortugues LIKE '%" . $pesquisarPalavra . "%' order by palavraPortugues";
-            } else if ($opcaoPesquisa == 'indigena') {
-                $registro_palavras = "SELECT * FROM palavra P inner join lingua L on(P.idLingua=L.idLingua) inner join povo PV on(P.idPovo=PV.idPovo) WHERE P.palavraIndigina LIKE '%" . $pesquisarPalavra . "%' order by palavraPortugues";
-            } else if ($opcaoPesquisa == 'tipo') {
-                $registro_palavras = "SELECT * FROM palavra P inner join lingua L on(P.idLingua=L.idLingua) inner join povo PV on(P.idPovo=PV.idPovo) WHERE L.nomeLingua LIKE '%" . $pesquisarPalavra . "%' order by palavraPortugues";
-            } else if ($opcaoPesquisa == 'povo') {
-                $registro_palavras = "SELECT * FROM palavra P inner join lingua L on(P.idLingua=L.idLingua) inner join povo PV on(P.idPovo=PV.idPovo)  WHERE PV.nomePovo LIKE '%" . $pesquisarPalavra . "%' order by P.palavraPortugues";
-            }
+            $registro_palavras = $this->Palavras_model->buscaPesquisa($pesquisa)->result();
 
             $quantidadeRegistroPalavras = 0;
+//            Condição para os filtros
+        } else if ((!empty($_GET['lingua'])) || (!empty($_GET['povo']))) {
+
+            $opcaoLingua = $_GET['lingua'];
+            $opcaoPovo = $_GET['povo'];
+
+            $limit = array(
+                'inicio' => $this->numeroRegistroPorPagina,
+                'totalpagina' => $this->numeroPagina * $this->numeroRegistroPorPagina,
+            );
+
+            $registro_palavras = $this->Palavras_model->buscaFiltro($opcaoLingua, $opcaoPovo, $limit)->result();
+
+            $registro_totais_filtros = $this->Palavras_model->buscaFiltroRelatorio($opcaoLingua, $opcaoPovo)->result();
+
+
+            $qtde_paginas = ceil(count($registro_totais_filtros) / $this->numeroRegistroPorPagina);
+
+//         Se não aver condição alguma fas isso   
         } else {
             $limit = array(
                 'inicio' => $this->numeroRegistroPorPagina,
@@ -78,9 +93,14 @@ class Palavras extends CI_Controller {
             );
 
             $registro_palavras = $this->Palavras_model->consultarPalavras($limit)->result();
+
+
+            $quantidadeRegistroPalavras = $this->Palavras_model->consultarNumeroRegistro();
+            $qtde_paginas = ceil($quantidadeRegistroPalavras / $this->numeroRegistroPorPagina);
         }
 
-        $qtde_paginas = ceil($quantidadeRegistroPalavras / $this->numeroRegistroPorPagina);
+
+
 
         $this->todas_palavras = NULL;
 
@@ -98,6 +118,15 @@ class Palavras extends CI_Controller {
         }
 
 
+        $linguas = $this->Lingua_model->obter_todas_lingua_ativas()->result();
+
+        $povos = $this->Povo_model->obter_todos_povo_ativo()->result();
+
+
+
+
+
+
 
 
         if ($this->verificar_usuario_logado() == TRUE) {
@@ -113,53 +142,73 @@ class Palavras extends CI_Controller {
 
         $this->dados = array(
             'registro_pralavras' => $this->todas_palavras,
+            'linguas' => $linguas,
+            'povos' => $povos,
+            'opcaoLingua' => $opcaoLingua,
+            'opcaoPovo' => $opcaoPovo,
             'qtde_paginas' => $qtde_paginas,
             'tipoUsuarioSistema' => $this->session->userdata('tipo_usuario'),
         );
+
 
         $this->saida_tela();
     }
 
     public function minhas() {
+
         if ($this->verificar_usuario_logado() == TRUE) {
 
+            $id_usuario_logado = $this->session->userdata('id_usuario');
+
             if (isset($_GET['pg'])) {
-                $this->numeroPagina = $_GET['pg'];
+                $this->numeroPagina = $_GET['pg'] - 1;
             }
 
+            $opcaoLingua = 0;
+            $opcaoPovo = 0;
 
-            $this->quantidadeRegistroPalavras = $this->Palavras_model->consultarNumeroRegistroPorUsuario($this->session->userdata('id_usuario'));
             $registro_palavras = "";
+            $qtde_paginas = 0;
 
+            if (isset($_GET['p'])) {
 
+                $pesquisa = trim(strip_tags($_GET['p']));
 
-            if ((isset($_GET['pesquisarPalavra']) && (isset($_GET['opcaoPesquisa'])))) {
-
-                $opcaoPesquisa = mysql_escape_string(trim(strip_tags($_GET['opcaoPesquisa'])));
-                $pesquisarPalavra = mysql_escape_string(trim(strip_tags($_GET['pesquisarPalavra'])));
-
-                if ($opcaoPesquisa == 'portugues') {
-                    $registro_palavras = "SELECT * FROM palavra P inner join lingua L on(P.idLingua=L.idLingua) inner join povo PV on(P.idPovo=PV.idPovo) WHERE P.palavraPortugues LIKE '%" . $pesquisarPalavra . "%' order by palavraPortugues";
-                } else if ($opcaoPesquisa == 'indigena') {
-                    $registro_palavras = "SELECT * FROM palavra P inner join lingua L on(P.idLingua=L.idLingua) inner join povo PV on(P.idPovo=PV.idPovo) WHERE P.palavraIndigina LIKE '%" . $pesquisarPalavra . "%' order by palavraPortugues";
-                } else if ($opcaoPesquisa == 'tipo') {
-                    $registro_palavras = "SELECT * FROM palavra P inner join lingua L on(P.idLingua=L.idLingua) inner join povo PV on(P.idPovo=PV.idPovo) WHERE L.nomeLingua LIKE '%" . $pesquisarPalavra . "%' order by palavraPortugues";
-                } else if ($opcaoPesquisa == 'povo') {
-                    $registro_palavras = "SELECT * FROM palavra P inner join lingua L on(P.idLingua=L.idLingua) inner join povo PV on(P.idPovo=PV.idPovo)  WHERE PV.nomePovo LIKE '%" . $pesquisarPalavra . "%' order by P.palavraPortugues";
-                }
+                $registro_palavras = $this->Palavras_model->buscaPesquisaPorUsuario($pesquisa, $id_usuario_logado)->result();
 
                 $quantidadeRegistroPalavras = 0;
+            } else if ((!empty($_GET['lingua'])) || (!empty($_GET['povo']))) {
+
+                $opcaoLingua = $_GET['lingua'];
+                $opcaoPovo = $_GET['povo'];
+
+                $limit = array(
+                    'inicio' => $this->numeroRegistroPorPagina,
+                    'totalpagina' => $this->numeroPagina * $this->numeroRegistroPorPagina,
+                );
+
+                $registro_palavras = $this->Palavras_model->buscaFiltroMinhas($opcaoLingua, $opcaoPovo, $limit, $id_usuario_logado)->result();
+
+                $registro_totais_filtros = $this->Palavras_model->buscaFiltroRelatorioMinhas($opcaoLingua, $opcaoPovo, $id_usuario_logado)->result();
+
+
+                $qtde_paginas = ceil(count($registro_totais_filtros) / $this->numeroRegistroPorPagina);
+
+//         Se não aver condição alguma fas isso   
             } else {
                 $limit = array(
                     'inicio' => $this->numeroRegistroPorPagina,
                     'totalpagina' => $this->numeroPagina * $this->numeroRegistroPorPagina,
                 );
 
-                $registro_palavras = $this->Palavras_model->consultarPalavrasPorUsuario($limit, $this->session->userdata('id_usuario'))->result();
+                $registro_palavras = $this->Palavras_model->consultarPalavrasPorUsuario($limit, $id_usuario_logado)->result();
+
+                $this->quantidadeRegistroPalavras = $this->Palavras_model->consultarNumeroRegistroPorUsuario($id_usuario_logado);
+                $qtde_paginas = ceil($this->quantidadeRegistroPalavras / $this->numeroRegistroPorPagina);
             }
 
 
-            $qtde_paginas = ceil($this->quantidadeRegistroPalavras / $this->numeroRegistroPorPagina);
+
 
             $this->todas_palavras = NULL;
 
@@ -175,10 +224,18 @@ class Palavras extends CI_Controller {
                 $this->todas_palavras[] = $reg_pal;
             }
 
+            $linguas = $this->Lingua_model->obter_todas_lingua_ativas()->result();
+
+            $povos = $this->Povo_model->obter_todos_povo_ativo()->result();
+
 
             $this->dados = array(
                 'registro_pralavras' => $this->todas_palavras,
                 'qtde_paginas' => $qtde_paginas,
+                'linguas' => $linguas,
+                'povos' => $povos,
+                'opcaoLingua' => $opcaoLingua,
+                'opcaoPovo' => $opcaoPovo,
             );
 
             if ($this->tipo_usuario_logado() == 0 || $this->tipo_usuario_logado() == 1) {
@@ -202,7 +259,7 @@ class Palavras extends CI_Controller {
 
             $linguas = $this->Lingua_model->obter_todas_lingua()->result();
 
-
+            $tipo_palavra = $this->Categoria_model->obter_todos_tipo()->result();
 
             if ($this->tipo_usuario_logado() == 0 || $this->tipo_usuario_logado() == 1) {
                 $this->menu_sistema = 'admin/menuTop';
@@ -215,7 +272,8 @@ class Palavras extends CI_Controller {
 
             $this->dados = array(
                 'linguas' => $linguas,
-                'povos' => $povos
+                'povos' => $povos,
+                'tipo_palavra' => $tipo_palavra
             );
 
             $this->saida_tela();
@@ -268,7 +326,7 @@ class Palavras extends CI_Controller {
                         $id_palavra_cadastrada = $pal_exi->idPalavra;
                     }
 
-                    redirect($this->inserir_imagem($id_palavra_cadastrada));
+                    $this->inserir_imagem($id_palavra_cadastrada);
                 }
             }
         } else {
@@ -354,7 +412,9 @@ class Palavras extends CI_Controller {
                         $id_palavra_cadastrada = $pal_exi->idPalavra;
                     }
 
-                    redirect($this->inserir_imagem($id_palavra_cadastrada));
+                    // echo $id_palavra_cadastrada;
+
+                    $this->inserir_imagem($id_palavra_cadastrada);
                 }
             }
         } else {
@@ -428,7 +488,7 @@ class Palavras extends CI_Controller {
             if (!$this->upload->do_upload('imagemPalavra')) {
                 $error = array('error' => $this->upload->display_errors());
 
-                $this->inserir_imagem($id_palavra, $error);
+                echo $error['error'];
             } else {
 
                 $palavra;
@@ -448,8 +508,6 @@ class Palavras extends CI_Controller {
 
 
                 $this->Palavras_model->alterarPalavra($dados_update, $id_palavra);
-
-
 
                 echo 'imagem alterada com sucesso';
             }
@@ -492,6 +550,7 @@ class Palavras extends CI_Controller {
 
             $id_palavra = $this->input->post('idPalavra');
 
+
             $palavra_existe = $this->Palavras_model->obterPalavraId($id_palavra)->result();
 
             if (count($palavra_existe) == 0) {
@@ -510,7 +569,7 @@ class Palavras extends CI_Controller {
             if (!$this->upload->do_upload('somPalavra')) {
                 $error = array('error' => $this->upload->display_errors());
 
-                $this->inserir_som($id_palavra, $error);
+                echo $error['error'];
             } else {
 
                 $palavra;
@@ -588,9 +647,134 @@ class Palavras extends CI_Controller {
 
 
 
-             $this->load->view('tela/informacaoAutor',$dados);
+            $this->load->view('tela/informacaoAutor', $dados);
             //$this->load->view('tela/titulo');
         }
+    }
+
+    public function gerar_relatorio() {
+
+        $registro_palavras;
+
+        if ((!empty($_GET['lingua'])) || (!empty($_GET['povo']))) {
+
+            $opcaoLingua = $_GET['lingua'];
+            $opcaoPovo = $_GET['povo'];
+
+            $registro_palavras = $this->Palavras_model->buscaFiltroRelatorio($opcaoLingua, $opcaoPovo)->result();
+        } else {
+
+            $registro_palavras = $this->Palavras_model->buscarTodasPalavras()->result();
+        }
+
+        foreach ($registro_palavras as $reg_pal) {
+            if ((!strlen($reg_pal->imagemPalavra) > 2) || (!file_exists("./imagem/" . $reg_pal->imagemPalavra)) || $reg_pal->imagemPalavra == NULL) {
+                $reg_pal->imagemPalavra = 'sem_imagem.jpg';
+            }
+
+
+
+            if ($reg_pal->obsPalavra == "" || $reg_pal->obsPalavra == NULL) {
+                $reg_pal->obsPalavra = 1;
+            }
+        }
+
+
+
+        $html = $this->reternoHtmlRelatorioVisitante($registro_palavras);
+
+
+        // echo $html;
+
+        $this->gerarPdf($html);
+    }
+
+    public function gerar_relatorio_minhas() {
+        if ($this->verificar_usuario_logado() == TRUE) {
+
+            $id_usuario_logado = $this->session->userdata('id_usuario');
+
+            $registro_palavras;
+
+            if ((!empty($_GET['lingua'])) || (!empty($_GET['povo']))) {
+
+                $opcaoLingua = $_GET['lingua'];
+                $opcaoPovo = $_GET['povo'];
+
+                $registro_palavras = $this->Palavras_model->buscaFiltroRelatorioMinhas($opcaoLingua, $opcaoPovo, $id_usuario_logado)->result();
+            } else {
+
+
+                $registro_palavras = $this->Palavras_model->buscarTodasPalavrasUsuario($id_usuario_logado)->result();
+            }
+
+            foreach ($registro_palavras as $reg_pal) {
+                if ((!strlen($reg_pal->imagemPalavra) > 2) || (!file_exists("./imagem/" . $reg_pal->imagemPalavra)) || $reg_pal->imagemPalavra == NULL) {
+                    $reg_pal->imagemPalavra = 'sem_imagem.jpg';
+                }
+
+
+
+                if ($reg_pal->obsPalavra == "" || $reg_pal->obsPalavra == NULL) {
+                    $reg_pal->obsPalavra = 1;
+                }
+            }
+
+
+
+            $html = $this->reternoHtmlRelatorioVisitante($registro_palavras);
+
+
+            // echo $html;
+
+            $this->gerarPdf($html);
+        } else {
+            redirect(base_url());
+        }
+    }
+
+    protected function reternoHtmlRelatorioVisitante($dados) {
+        $html = '<html><head> </head><body>';
+
+        $html .= '<h1> Relatório das palavras indegenas </h1>';
+
+        $html .= '<table style="width:100% ;border: 1px solid #000"><thead><tr><td>Imagem</td><td>Português</td><td>Indigena</td><td>Lingua</td><td>Povo</td></tr></thead><tbody>';
+
+        foreach ($dados as $dd) {
+            $html .= '<tr>';
+            $html .= '<td><img src="' . base_url("imagem/" . $dd->imagemPalavra) . '" width="100" height="100" /> </td>';
+            $html .= '<td>' . $dd->palavraPortugues . '</td>';
+            $html .= '<td>' . $dd->palavraIndigina . '</td>';
+            $html .= '<td>' . $dd->nomeLingua . '</td>';
+            $html .= '<td>' . $dd->nomePovo . '</td>';
+
+
+            $html .= '</tr>';
+        }
+
+
+        $html .= '</tbody></table>';
+        $html .= '</body></html>';
+
+        return $html;
+    }
+
+    protected function gerarPdf($html) {
+        $this->load->library('mpdf/mpdf');
+
+        $mpdf = new mPDF('c', 'A4', '', '', 32, 25, 27, 25, 16, 13);
+
+        $mpdf->SetDisplayMode('fullpage');
+
+        $mpdf->list_indent_first_level = 0; // 1 or 0 - whether to indent the first level of a list
+// LOAD a stylesheet
+//        $stylesheet = file_get_contents('mpdfstyletables.css');
+//        $mpdf->WriteHTML($stylesheet, 1); // The parameter 1 tells that this is css/style only and no body/html/text
+
+        $mpdf->WriteHTML($html);
+
+        $mpdf->Output();
+        exit;
     }
 
 }

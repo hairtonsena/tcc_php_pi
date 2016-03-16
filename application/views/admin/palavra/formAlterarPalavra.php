@@ -78,7 +78,7 @@ foreach ($palavra as $pal) {
             </div>
             <div class="form-group">
                 <div class="col-sm-9 col-sm-offset-3">
-                    <input class="btn btn-default" type="submit" value="Alterar"/>
+                    <a class="btn btn-default" href="<?php echo base_url("palavras/inserir_imagem/".$palavra_alterar->idPalavra) ?>">Cancelar</a> <input class="btn btn-default" type="submit" value="Alterar"/>
                 </div>
             </div>
         </fieldset>

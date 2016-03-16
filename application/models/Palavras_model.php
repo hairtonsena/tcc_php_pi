@@ -25,6 +25,54 @@ class Palavras_model extends CI_Model {
         return $this->db->count_all_results();
     }
 
+    public function buscaPesquisa($pesquisa = '') {
+        $this->db->select('*');
+        $this->db->from('palavra');
+        $this->db->join('lingua', 'lingua.idLingua = palavra.idLingua');
+        $this->db->join('povo', 'povo.idPovo = palavra.idPovo');
+        $this->db->like(array('palavra.palavraPortugues' => $pesquisa));
+        $this->db->or_like(array('palavra.palavraIndigina' => $pesquisa));
+        return $this->db->get();
+    }
+
+    public function buscaFiltro($lingua, $povo, $limit) {
+        $this->db->select('*');
+        $this->db->from('palavra');
+        $this->db->join('lingua', 'lingua.idLingua = palavra.idLingua');
+        $this->db->join('povo', 'povo.idPovo = palavra.idPovo');
+
+        if ($lingua == 0) {
+            $this->db->where(array('povo.idPovo' => $povo));
+        } else if ($povo == 0) {
+            $this->db->where(array('lingua.idLingua' => $lingua));
+        } else {
+            $this->db->where(array('lingua.idLingua' => $lingua, 'povo.idPovo' => $povo));
+        }
+
+        $this->db->limit($limit['inicio'], $limit['totalpagina']);
+
+        return $this->db->get();
+    }
+
+    public function buscaFiltroMinhas($lingua, $povo, $limit, $id_usuario) {
+        $this->db->select('*');
+        $this->db->from('palavra');
+        $this->db->join('lingua', 'lingua.idLingua = palavra.idLingua');
+        $this->db->join('povo', 'povo.idPovo = palavra.idPovo');
+        $this->db->where('idUsuario', $id_usuario);
+        if ($lingua == 0) {
+            $this->db->where(array('povo.idPovo' => $povo));
+        } else if ($povo == 0) {
+            $this->db->where(array('lingua.idLingua' => $lingua));
+        } else {
+            $this->db->where(array('lingua.idLingua' => $lingua, 'povo.idPovo' => $povo));
+        }
+
+        $this->db->limit($limit['inicio'], $limit['totalpagina']);
+
+        return $this->db->get();
+    }
+
     public function consultarPalavras($limit) {
 
         $this->db->select('*');
@@ -36,6 +84,64 @@ class Palavras_model extends CI_Model {
 
         return $query = $this->db->get();
     }
+
+//    Início de sessão de relatório
+    public function buscarTodasPalavras() {
+
+        $this->db->select('*');
+        $this->db->from('palavra');
+        $this->db->join('lingua', 'lingua.idLingua = palavra.idLingua');
+        $this->db->join('povo', 'povo.idPovo = palavra.idPovo');
+
+        return $query = $this->db->get();
+    }
+
+    public function buscaFiltroRelatorio($lingua, $povo) {
+        $this->db->select('*');
+        $this->db->from('palavra');
+        $this->db->join('lingua', 'lingua.idLingua = palavra.idLingua');
+        $this->db->join('povo', 'povo.idPovo = palavra.idPovo');
+
+        if ($lingua == 0) {
+            $this->db->where(array('povo.idPovo' => $povo));
+        } else if ($povo == 0) {
+            $this->db->where(array('lingua.idLingua' => $lingua));
+        } else {
+            $this->db->where(array('lingua.idLingua' => $lingua, 'povo.idPovo' => $povo));
+        }
+
+        return $this->db->get();
+    }
+
+    public function buscaFiltroRelatorioMinhas($lingua, $povo,$id_usuario) {
+        $this->db->select('*');
+        $this->db->from('palavra');
+        $this->db->join('lingua', 'lingua.idLingua = palavra.idLingua');
+        $this->db->join('povo', 'povo.idPovo = palavra.idPovo');
+        $this->db->where("palavra.idUsuario",$id_usuario);
+        if ($lingua == 0) {
+            $this->db->where(array('povo.idPovo' => $povo));
+        } else if ($povo == 0) {
+            $this->db->where(array('lingua.idLingua' => $lingua));
+        } else {
+            $this->db->where(array('lingua.idLingua' => $lingua, 'povo.idPovo' => $povo));
+        }
+
+        return $this->db->get();
+    }
+
+     public function buscarTodasPalavrasUsuario($id_usuario) {
+
+        $this->db->select('*');
+        $this->db->from('palavra');
+        $this->db->join('lingua', 'lingua.idLingua = palavra.idLingua');
+        $this->db->join('povo', 'povo.idPovo = palavra.idPovo');
+        $this->db->where("palavra.idUsuario",$id_usuario);
+        return $query = $this->db->get();
+    }
+
+    
+    // Fim de sessão de relatório
 
     public function consultarNumeroRegistroPorUsuario($id_usuario) {
         $this->db->select('*');
@@ -57,6 +163,17 @@ class Palavras_model extends CI_Model {
         $this->db->limit($limit['inicio'], $limit['totalpagina']);
 
         return $query = $this->db->get();
+    }
+
+    public function buscaPesquisaPorUsuario($pesquisa = '', $id_usuario) {
+        $this->db->select('*');
+        $this->db->from('palavra');
+        $this->db->join('lingua', 'lingua.idLingua = palavra.idLingua');
+        $this->db->join('povo', 'povo.idPovo = palavra.idPovo');
+        $this->db->where('idUsuario', $id_usuario);
+        $this->db->like(array('palavra.palavraPortugues' => $pesquisa));
+        $this->db->or_like(array('palavra.palavraIndigina' => $pesquisa));
+        return $this->db->get();
     }
 
     public function consultarPalavrasExiste($dados) {

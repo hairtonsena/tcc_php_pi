@@ -3,16 +3,18 @@ jQuery(function ($) {
 
 
 
-    var url_base = 'http://localhost/';
+    var url_base = 'http://localhost/pi_ci/';
 
 
-    $(".pagination").hide();
+
     $(function () {
         $(window).scroll(function () {
-            if ($(this).scrollTop() > 200) {
+            if ($(this).scrollTop() > 50) {
                 $('.pagination').fadeIn();
             } else {
+                $(".pagination").hide();
                 $('.pagination').fadeOut();
+
             }
         });
     });
@@ -37,7 +39,7 @@ jQuery(function ($) {
             mensagem.html("<div class='alert alert-danger'>Por favor, selecione uma imagem!<div>");
         } else {
             $("#form_upload_imagem").ajaxForm({
-                url: url_base + 'palavras_indigenas/upImagem.php?acao=salvar_imagem_palavra',
+                url: url_base + 'palavras/salvar_imagem',
                 uploadProgress: function (event, position, total, percentComplete) {
                     div_porcentagem.css('display', 'block');
                     barra.width(percentComplete + '%');
@@ -97,7 +99,7 @@ jQuery(function ($) {
             mensagem.html("<div class='alert alert-danger'>Por favor, selecione uma imagem!<div>");
         } else {
             $("#form_upload_som").ajaxForm({
-                url: url_base + 'palavras_indigenas/upSom.php?acao=salvar_som_palavra',
+                url: url_base + 'palavras/salvar_som',
                 uploadProgress: function (event, position, total, percentComplete) {
                     div_porcentagem.css('display', 'block');
                     barra.width(percentComplete + '%');
@@ -140,8 +142,23 @@ jQuery(function ($) {
 });
 
 
+function fuc_filtros() {
 
+    var lingua = $('#lingua').val();
 
+    var povo = $('#povo').val();
+
+    window.location = "http://localhost/pi_ci/" + "?lingua=" + lingua + "&povo=" + povo;
+}
+
+function fuc_filtros_minhas() {
+
+    var lingua = $('#lingua').val();
+
+    var povo = $('#povo').val();
+
+    window.location = "http://localhost/pi_ci/palavras/minhas" + "?lingua=" + lingua + "&povo=" + povo;
+}
 
 
 
@@ -179,7 +196,7 @@ function exibirObservacao(texto) {
     var t = texto;
     $('#myModalLabel').html('Observação');
     $('#conteudodiv').html(t);
-    
+
     $('#myModal').modal('show');
 }
 

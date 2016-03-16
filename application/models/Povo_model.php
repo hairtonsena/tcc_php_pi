@@ -16,9 +16,23 @@ class Povo_model extends CI_Model {
     public function obter_todos_povo() {
         return $this->db->get('povo');
     }
+    
+    public function obter_povo_pesquisa($pesquisa){
+        $this->db->like("nomePovo",$pesquisa);
+        $this->db->or_like("obsPovo",$pesquisa);
+        return $this->db->get("povo");
+    }
+
+    public function obter_todos_povo_ativo() {
+        return $this->db->get_where('povo', array('statusPovo' => 1));
+    }
 
     public function obter_povo_id($id_povo) {
         return $this->db->get_where('povo', array('idPovo' => $id_povo));
+    }
+
+    public function obter_palavras_por_povo($id_povo) {
+        return $this->db->get_where('palavra', array("idPovo" => $id_povo));
     }
 
     public function inserirPovo($dados) {
