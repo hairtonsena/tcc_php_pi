@@ -22,6 +22,7 @@
                 <li><a href="<?php echo base_url('Lingua') ?>"> Linguas </a></li>
                 <!--                <li><a href="./?acao=cadastro_povo"> Cadastro Povo </a></li>-->
                 <li><a href="<?php echo base_url('povo') ?>"> Povos </a></li>
+                <li><a href="<?php echo base_url('categorias') ?>"> Categorias </a></li>
                 <li><a href="<?php echo base_url('usuario') ?>" >Usuário</a></li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Ajuda <span class="caret"></span> </a>
